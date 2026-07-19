@@ -1,26 +1,621 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #e8ebeb;
+  --muted: #a3aaac;
+  --glass: rgba(21, 29, 30, .43);
+  --teal-glow: #a9e3db;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: #060b0c;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: #060b0c;
+  color: var(--ink);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Shell & Scene Container */
+.portfolio-shell {
+  overflow: clip;
+}
+
+.scene-scroll {
+  height: 330svh;
+  position: relative;
+}
+
+.scene-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #060b0c;
+}
+
+/* Layers */
+.office-layer, .portrait-layer {
+  position: absolute;
+  will-change: transform;
+}
+
+.office-layer {
+  inset: -4%;
+  background-image: linear-gradient(90deg, rgba(3, 7, 8, .35), rgba(3, 7, 8, .18)), url('/images/office-wide.png');
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.02);
+  z-index: 1;
+}
+
+.portrait-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: min(84vw, 1300px);
+  height: 100vh;
+  bottom: 0;
+  transform-origin: center bottom;
+  background-image: url('/images/alvalen-portrait.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  filter: saturate(.94) contrast(1.02);
+  z-index: 3;
+}
+
+.scene-grain {
+  position: absolute;
+  inset: 0;
+  opacity: .11;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+  z-index: 2;
+}
+
+.scene-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  opacity: .45;
+  pointer-events: none;
+  background: radial-gradient(ellipse 70% 82% at 50% 50%, transparent 30%, rgba(3, 6, 7, .45) 75%, rgba(3, 6, 7, .92));
+}
+
+/* Navigation */
+.scene-nav {
+  position: absolute;
+  z-index: 15;
+  inset: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px clamp(22px, 4vw, 62px);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.wordmark {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.wordmark span {
+  color: var(--teal-glow);
+  font-size: 8px;
+  vertical-align: top;
+  margin-left: 2px;
+}
+
+.nav-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d5dbdc;
+}
+
+.nav-status span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal-glow);
+  box-shadow: 0 0 12px var(--teal-glow);
+}
+
+.nav-contact {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(232, 235, 235, .5);
+  transition: opacity 0.2s;
+}
+
+.nav-contact:hover {
+  opacity: 0.8;
+}
+
+/* Scene Intro Typography (Layered BEHIND Character) */
+.scene-intro {
+  position: absolute;
+  z-index: 5; /* Layered in FRONT of character */
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  height: fit-content;
+  left: 8vw;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.hero-name {
+  margin: 0;
+  color: #ffffff;
+  font-family: var(--font-tech-sans), sans-serif;
+  font-size: clamp(3.5rem, 8vw, 7.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.8;
+  text-transform: uppercase;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.hero-surname {
+  margin-top: 15px;
+  margin-left: 8px;
+  color: var(--teal-glow);
+  font-family: var(--font-tech-mono), monospace;
+  font-size: clamp(1.3rem, 2.8vw, 2.6rem);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 3D Tech Card Constellation */
+.tech-constellation {
+  position: absolute;
+  inset: 0;
+  perspective: 900px;
+  pointer-events: none;
+}
+
+.tech-constellation--bg {
+  z-index: 2; /* Behind portrait */
+}
+
+.tech-constellation--fg {
+  z-index: 4; /* In front of portrait */
+}
+
+.tech-card {
+  position: absolute;
+  will-change: transform;
+}
+
+.tech-card-inner {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  min-width: 195px;
+  padding: 13px 18px;
+  opacity: .94;
+  transform-style: preserve-3d;
+  border: 1px solid rgba(221, 242, 240, .18);
+  border-radius: 14px;
+  background: linear-gradient(130deg, rgba(202, 240, 235, .11), rgba(9, 15, 16, .65));
+  box-shadow: 0 15px 35px rgba(0, 0, 0, .25), inset 0 1px rgba(255, 255, 255, .1);
+  backdrop-filter: blur(14px);
+  animation: float-idle var(--float-duration, 6s) ease-in-out infinite alternate;
+}
+
+/* Card layout variations */
+/* 1. Large Feature Card (mainly for right-side highlights) */
+.tech-card--lg-variant {
+  min-width: 255px;
+  padding: 18px 24px;
+  border-radius: 18px;
+  border-color: rgba(221, 242, 240, 0.28);
+  background: linear-gradient(130deg, rgba(202, 240, 235, 0.16), rgba(9, 15, 16, 0.72));
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.tech-card--lg-variant h2 {
+  font-size: 20px; /* High-res native size to avoid pixelation on zoom */
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.tech-card--lg-variant p {
+  font-size: 12px;
+  color: var(--teal-glow);
+}
+
+.tech-card--lg-variant .tech-symbol {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-color: rgba(200, 239, 234, 0.35);
+  font-size: 13px;
+  color: #ffffff;
+  background: rgba(169, 227, 219, 0.08);
+}
+
+/* 2. Compact Square Card */
+.tech-card--sq-variant {
+  min-width: 95px;
+  width: 95px;
+  height: 95px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.tech-card--sq-variant div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tech-card--sq-variant p {
+  display: none;
+}
+
+.tech-card--sq-variant h2 {
+  font-size: 11px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.tech-card--sq-variant .tech-symbol {
+  margin: 0;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  font-size: 12px;
+}
+
+/* 3. Small Pill Card */
+.tech-card--sm-variant {
+  min-width: 135px;
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
+.tech-card--sm-variant h2 {
+  font-size: 10px;
+}
+
+.tech-card--sm-variant p {
+  font-size: 7px;
+}
+
+.tech-card--sm-variant .tech-symbol {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  font-size: 9px;
+}
+
+.tech-card p {
+  margin: 0 0 3px;
+  color: #b8c9c8;
+  font-size: 8px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.tech-card h2 {
+  margin: 0;
+  font-size: 15px; /* High-res native size to avoid pixelation on zoom */
+  font-weight: 600;
+}
+
+.tech-symbol {
+  display: grid;
+  flex: 0 0 27px;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border: 1px solid rgba(200, 239, 234, .25);
+  border-radius: 8px;
+  color: var(--teal-glow);
+  font-size: 11px;
+  font-family: var(--font-geist-mono), monospace;
+  transform: translateZ(25px); /* 3D Pop-out icon */
+}
+
+/* Positioning Tech Cards to frame the center character */
+/* Left framing cards (Distributed to surround the portrait and clear the title) */
+.tech-card--frontend {
+  top: 15%;
+  left: 8vw;
+}
+
+.tech-card--state {
+  top: 28%;
+  left: 10vw;
+}
+
+/* Placed in front of the character's left side, close to camera */
+.tech-card--code {
+  top: 55%;
+  left: 28vw;
+  z-index: 10 !important; /* Always render in front of other cards/code-blocks */
+}
+
+.tech-card--backend {
+  top: 25%;
+  left: 24vw;
+}
+
+.tech-card--figma {
+  bottom: 22%;
+  left: 16vw; /* Moved down-left to prevent overlap with Creative GSAP */
+}
+
+/* Right framing cards (Symmetrically distributed on the right side) */
+.tech-card--devops {
+  top: 20%;
+  right: 28vw;
+}
+
+.tech-card--focus {
+  bottom: 30%;
+  right: 26vw;
+}
+
+/* Placed in front of the character's right side, close to camera */
+.tech-card--graphics {
+  top: 46%;
+  right: 30vw;
+  z-index: 10 !important; /* Always render in front of other cards/code-blocks */
+}
+
+.tech-card--typescript {
+  top: 24%;
+  right: 8vw;
+}
+
+.tech-card--database {
+  bottom: 24%;
+  right: 14vw;
+}
+
+.tech-card--tailwind {
+  bottom: 12%;
+  right: 6vw;
+}
+
+.tech-card--testing {
+  bottom: 8%;
+  right: 22vw;
+}
+
+/* 3D Code Blocks */
+.code-block {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.code-block-inner {
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(200, 230, 225, 0.05), rgba(9, 15, 16, 0.7));
+  border: 1px solid rgba(221, 242, 240, 0.12);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  color: #c7f3ed;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  transform-style: preserve-3d;
+  animation: float-idle var(--float-duration, 7s) ease-in-out infinite alternate;
+}
+
+.code-block pre {
+  margin: 0;
+  transform: translateZ(20px); /* 3D Pop-out code text */
+}
+
+.code-block--1 {
+  top: 66%;
+  left: 12vw;
+}
+
+.code-block--2 {
+  top: 62%;
+  right: 8vw;
+}
+
+/* 3D Float Animation */
+@keyframes float-idle {
+  0% {
+    transform: translateY(0px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0px);
+  }
+  100% {
+    transform: translateY(-8px) rotateX(calc(var(--rx, 0deg) + 2deg)) rotateY(calc(var(--ry, 0deg) - 2deg)) translateZ(10px);
+  }
+}
+
+/* Scroll Cue indicator */
+.scroll-cue {
+  position: absolute;
+  z-index: 8;
+  right: clamp(22px, 4vw, 62px);
+  bottom: 31px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #dee7e7;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  will-change: transform, opacity;
+}
+
+.scroll-cue svg {
+  animation: bob 1.8s ease-in-out infinite;
+}
+
+@keyframes bob {
+  50% {
+    transform: translateY(7px);
+  }
+}
+
+/* After Scene Section */
+.after-scene {
+  display: grid;
+  min-height: 75svh;
+  padding: clamp(60px, 12vw, 170px) clamp(22px, 9vw, 150px);
+  align-content: center;
+  background: #060b0c;
+  border-top: 1px solid rgba(172, 218, 213, .12);
+  position: relative;
+  z-index: 10;
+}
+
+.after-scene h2 {
+  margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 300;
+  letter-spacing: -.03em;
+  line-height: .91;
+  max-width: 800px;
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  text-transform: uppercase;
+}
+
+.after-scene > p:last-child {
+  max-width: 420px;
+  margin: 34px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  color: #b7d8d4;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+/* Responsiveness */
+@media (max-width: 1100px) {
+  .portrait-layer {
+    width: 65vw;
+    height: 80vh;
+  }
+  .tech-card--focus {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .portrait-layer {
+    width: 75vw;
+    height: 75vh;
+  }
+  .code-block--2 {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .scene-scroll {
+    height: 250svh;
+  }
+  .nav-status {
+    display: none;
+  }
+  .nav-contact {
+    font-size: 9px;
+  }
+  .portrait-layer {
+    width: 92vw;
+    height: 65vh;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+  }
+  .scene-intro {
+    top: 35%;
+    left: 5%;
+    width: 90vw;
+    align-items: center;
+  }
+  .hero-name {
+    font-size: clamp(3.5rem, 15vw, 6rem);
+  }
+  .hero-surname {
+    margin-top: -5px;
+    margin-left: 0;
+    font-size: 2.4rem;
+  }
+  .tech-card {
+    min-width: 130px;
+    padding: 8px 10px;
+  }
+  .tech-card h2 {
+    font-size: 10px;
+  }
+  .tech-card--frontend { top: 57%; left: 4%; }
+  .tech-card--typescript { top: 72%; right: 3%; }
+  .tech-card--code { bottom: 12%; left: 4%; }
+  .tech-card--tailwind { display: none; }
+  .tech-card--graphics { display: none; }
+  .tech-card--focus { display: none; }
+  
+  .code-block {
+    display: none;
+  }
+  
+  .scroll-cue {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-card, .code-block {
+    animation: none;
+    transform: none;
+  }
+  .scroll-cue svg {
+    animation: none;
+  }
 }
