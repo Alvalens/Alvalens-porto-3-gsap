@@ -46,6 +46,8 @@ a {
   overflow: hidden;
   isolation: isolate;
   background: #060b0c;
+  /* Global cinematic color grading filter for natural image/layer blending */
+  filter: contrast(1.02) saturate(0.94) brightness(0.99);
 }
 
 /* Layers */
@@ -97,6 +99,20 @@ a {
   opacity: .45;
   pointer-events: none;
   background: radial-gradient(ellipse 70% 82% at 50% 50%, transparent 30%, rgba(3, 6, 7, .45) 75%, rgba(3, 6, 7, .92));
+}
+
+/* Volumetric backlight halo to naturally blend portrait silhouette with background */
+.scene-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(90vw, 1000px);
+  height: 90vh;
+  background: radial-gradient(circle, rgba(169, 227, 219, 0.08) 0%, rgba(6, 11, 12, 0) 70%);
+  z-index: 2; /* Layered directly behind portrait */
+  pointer-events: none;
+  mix-blend-mode: screen;
 }
 
 /* Navigation */
@@ -154,43 +170,74 @@ a {
   opacity: 0.8;
 }
 
-/* Scene Intro Typography (Layered BEHIND Character) */
+/* Scene Intro Typography (Layered behind foreground cards, in front of portrait) */
 .scene-intro {
   position: absolute;
-  z-index: 5; /* Layered in FRONT of character */
-  top: 0;
-  bottom: 0;
-  margin: auto 0;
-  height: fit-content;
-  left: 8vw;
+  z-index: 5;
+  top: auto; /* Clear top centering */
+  bottom: 12vh; /* Anchored in bottom-left corner */
+  left: 4vw; /* Pushed to the left edge */
+  width: clamp(320px, 42vw, 620px); /* Bounded width */
   display: flex;
   flex-direction: column;
   pointer-events: none;
+  will-change: transform;
 }
 
 .hero-name {
   margin: 0;
-  color: #ffffff;
+  line-height: 0.9;
   font-family: var(--font-tech-sans), sans-serif;
-  font-size: clamp(3.5rem, 8vw, 7.8rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 0.8;
+  font-size: clamp(3.2rem, 8.5vw, 8.2rem);
+  font-weight: 850;
   text-transform: uppercase;
-  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #ffffff 30%, var(--teal-glow) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.35));
+  align-self: flex-start; /* Aligned Left */
 }
 
 .hero-surname {
-  margin-top: 15px;
-  margin-left: 8px;
-  color: var(--teal-glow);
+  display: block;
+  margin: -10px 0 0 0;
+  line-height: 0.95;
+  font-family: var(--font-serif), serif;
+  font-style: italic;
+  font-size: clamp(3rem, 8vw, 7.8rem);
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.65);
+  text-shadow: 0 0 45px rgba(169, 227, 219, 0.15);
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.35));
+  align-self: flex-end; /* Aligned Right */
+}
+
+.hero-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 25px;
   font-family: var(--font-tech-mono), monospace;
-  font-size: clamp(1.3rem, 2.8vw, 2.6rem);
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  line-height: 1;
+  font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+  letter-spacing: 0.22em;
+  color: var(--teal-glow);
   text-transform: uppercase;
-  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  align-self: flex-end; /* Anchored Right under surname */
+}
+
+.subtitle-tag {
+  display: flex;
+  align-items: center;
+  opacity: 0.85;
+}
+
+.subtitle-tag:not(:last-child)::after {
+  content: "•";
+  margin-left: 18px;
+  color: rgba(221, 242, 240, 0.25);
+  font-size: 10px;
 }
 
 /* 3D Tech Card Constellation */
@@ -206,7 +253,7 @@ a {
 }
 
 .tech-constellation--fg {
-  z-index: 4; /* In front of portrait */
+  z-index: 6; /* In front of portrait and title text */
 }
 
 .tech-card {
@@ -220,13 +267,18 @@ a {
   align-items: center;
   min-width: 195px;
   padding: 13px 18px;
-  opacity: .94;
+  opacity: .96;
   transform-style: preserve-3d;
-  border: 1px solid rgba(221, 242, 240, .18);
+  border: 1px solid rgba(221, 242, 240, .24);
   border-radius: 14px;
-  background: linear-gradient(130deg, rgba(202, 240, 235, .11), rgba(9, 15, 16, .65));
-  box-shadow: 0 15px 35px rgba(0, 0, 0, .25), inset 0 1px rgba(255, 255, 255, .1);
-  backdrop-filter: blur(14px);
+  background: linear-gradient(130deg, rgba(202, 240, 235, .13), rgba(9, 15, 16, .72));
+  /* 3D double shadow: ambient soft blur + sharp high-contrast drop shadow, plus top/bottom internal highlights for thickness */
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, .45), 
+    0 4px 10px rgba(0, 0, 0, .2),
+    inset 0 1.5px 0 rgba(255, 255, 255, .22), 
+    inset 0 -1.5px 0 rgba(0, 0, 0, .5);
+  backdrop-filter: blur(16px);
   animation: float-idle var(--float-duration, 6s) ease-in-out infinite alternate;
 }
 
@@ -261,6 +313,127 @@ a {
   font-size: 13px;
   color: #ffffff;
   background: rgba(169, 227, 219, 0.08);
+}
+
+/* 2. 1x1 Square Icon Card */
+.tech-card-inner--icon {
+  min-width: 90px !important;
+  width: 90px !important;
+  height: 90px !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px !important;
+  border-radius: 16px !important;
+  text-align: center;
+}
+
+.tech-card-inner--icon .tech-symbol {
+  margin: 0 !important;
+  width: 32px !important;
+  height: 32px !important;
+  flex: 0 0 32px !important;
+  font-size: 13px !important;
+}
+
+.tech-card-inner--icon .icon-name {
+  font-size: 9px;
+  font-family: var(--font-tech-mono), monospace;
+  color: #b8c9c8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transform: translateZ(15px);
+}
+
+/* 3. 1x1 Pulsing Status Card */
+.tech-card-inner--status {
+  min-width: 90px !important;
+  width: 90px !important;
+  height: 90px !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(130deg, rgba(0, 255, 136, 0.05), rgba(9, 15, 16, 0.8)) !important;
+  border-color: rgba(0, 255, 136, 0.15) !important;
+}
+
+.status-dot-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+  animation: pulse-glow 1.5s infinite alternate;
+  transform: translateZ(25px);
+}
+
+.status-text {
+  font-size: 9px;
+  font-weight: 700;
+  color: #00ff88;
+  font-family: var(--font-tech-mono), monospace;
+  letter-spacing: 0.05em;
+  transform: translateZ(15px);
+}
+
+@keyframes pulse-glow {
+  0% { transform: translateZ(25px) scale(0.9); opacity: 0.6; }
+  100% { transform: translateZ(25px) scale(1.1); opacity: 1; box-shadow: 0 0 16px rgba(0, 255, 136, 0.9); }
+}
+
+/* 4. 4x4 Creative Grid Metric Dashboard */
+.tech-card-inner--dashboard {
+  min-width: 175px !important;
+  width: 175px !important;
+  height: 175px !important;
+  padding: 14px !important;
+  border-radius: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.db-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  transform: translateZ(15px);
+  transform-style: preserve-3d;
+}
+
+.db-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(200, 239, 234, 0.03);
+  border: 1px solid rgba(221, 242, 240, 0.08);
+  border-radius: 10px;
+  padding: 4px;
+  transform-style: preserve-3d;
+}
+
+.db-label {
+  font-size: 8px;
+  color: #b8c9c8;
+  font-family: var(--font-tech-mono), monospace;
+  margin-bottom: 2px;
+  transform: translateZ(5px);
+}
+
+.db-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: var(--font-tech-sans), sans-serif;
+  transform: translateZ(10px);
 }
 
 /* 2. Compact Square Card */
@@ -354,41 +527,41 @@ a {
 /* Positioning Tech Cards to frame the center character */
 /* Left framing cards (Distributed to surround the portrait and clear the title) */
 .tech-card--frontend {
-  top: 15%;
-  left: 8vw;
+  top: 8%;
+  left: 4vw;
 }
 
 .tech-card--state {
   top: 28%;
-  left: 10vw;
+  left: 6vw;
 }
 
 /* Placed in front of the character's left side, close to camera */
 .tech-card--code {
-  top: 55%;
-  left: 28vw;
+  top: 38%;
+  left: 26vw;
   z-index: 10 !important; /* Always render in front of other cards/code-blocks */
 }
 
 .tech-card--backend {
-  top: 25%;
-  left: 24vw;
+  top: 34%;
+  right: 22vw; /* Shifted to right side to balance layout */
 }
 
 .tech-card--figma {
-  bottom: 22%;
-  left: 16vw; /* Moved down-left to prevent overlap with Creative GSAP */
+  top: 18%;
+  left: 22vw; /* Pushed up to clear the bottom-left title */
 }
 
 /* Right framing cards (Symmetrically distributed on the right side) */
 .tech-card--devops {
-  top: 20%;
+  top: 18%;
   right: 28vw;
 }
 
 .tech-card--focus {
-  bottom: 30%;
-  right: 26vw;
+  bottom: 34%;
+  right: 28vw;
 }
 
 /* Placed in front of the character's right side, close to camera */
@@ -404,8 +577,8 @@ a {
 }
 
 .tech-card--database {
-  bottom: 24%;
-  right: 14vw;
+  bottom: 22%;
+  right: 16vw;
 }
 
 .tech-card--tailwind {
@@ -414,7 +587,7 @@ a {
 }
 
 .tech-card--testing {
-  bottom: 8%;
+  bottom: 6%;
   right: 22vw;
 }
 
@@ -446,8 +619,8 @@ a {
 }
 
 .code-block--1 {
-  top: 66%;
-  left: 12vw;
+  top: 46%;
+  left: 6vw;
 }
 
 .code-block--2 {

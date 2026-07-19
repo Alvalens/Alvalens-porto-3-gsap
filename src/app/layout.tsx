@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Space_Grotesk, Space_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Space_Grotesk, Space_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,6 +23,13 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
 });
 
+const playfairDisplay = Playfair_Display({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  style: ["italic", "normal"],
+  weight: ["700", "900"],
+});
+
 export const metadata: Metadata = {
   title: "Alvalens — Portfolio",
   description: "The portfolio of Alvalen Shafelbilyunazra.",
@@ -36,7 +43,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${spaceMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
