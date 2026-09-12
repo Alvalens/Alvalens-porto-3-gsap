@@ -6,17 +6,17 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Import strategic tech icons from Simple Icons library
-import { 
-  SiNextdotjs, 
-  SiTailwindcss, 
-  SiTypescript, 
-  SiThreedotjs, 
-  SiNodedotjs, 
-  SiPostgresql, 
-  SiPython,
-  SiFigma, 
-  SiGithub, 
-  SiGreensock 
+import {
+  SiNextdotjs,
+  SiTailwindcss,
+  SiTypescript,
+  SiThreedotjs,
+  SiNodedotjs,
+  SiPostgresql,
+  SiSpringboot,
+  SiFigma,
+  SiGithub,
+  SiGreensock
 } from "react-icons/si";
 
 // Array mapping your strategic tech stack
@@ -31,7 +31,7 @@ const techCards = [
   // Custom Strategic Tech Cards (aligned with industry standard and Alvalen stack)
   { label: "Backend", value: "Node.js / NestJS", className: "tech-card--backend", symbol: "nodejs", rx: -8, ry: -14, duration: "5.4s", isBg: true, type: "capsule" },
   { label: "Database", value: "PostgreSQL / SQL", className: "tech-card--database", symbol: "postgresql", rx: 9, ry: -16, duration: "6.8s", isBg: false, type: "capsule" },
-  { label: "Language", value: "Python", className: "tech-card--state", symbol: "python", rx: -12, ry: 20, duration: "7s", isBg: false, type: "icon" },
+  { label: "Backend", value: "Java Spring Boot", className: "tech-card--state", symbol: "springboot", rx: -12, ry: 20, duration: "7s", isBg: false, type: "icon" },
   { label: "Metrics", value: "Malang, GMT+7", className: "tech-card--devops", symbol: "metrics", rx: 6, ry: -12, duration: "5.9s", isBg: true, type: "dashboard-4x4" },
   { label: "Design", value: "Figma Design", className: "tech-card--figma", symbol: "figma", rx: -10, ry: 18, duration: "6.3s", isBg: false, type: "icon" },
   { label: "GitHub", value: "@Alvalens", className: "tech-card--testing", symbol: "github", rx: 8, ry: -14, duration: "6s", isBg: false, type: "capsule" }
@@ -88,20 +88,28 @@ const projectsData = [
 // Official Career History Data mapping
 const experienceData = [
   {
-    time: "Aug 2025 – Present",
-    role: "Software Engineer (Enterprise Solutions)",
-    company: "MGG Software (Singapore Government Agency)",
-    companyShort: "MGG Software",
-    desc: "Core engineer for a Tier-1 Singaporean Government Agency. Engineered high-availability backend microservices using Java Spring Boot, ensuring 99.9% uptime for nationwide service traffic and system reliability.",
-    skills: ["Java Spring Boot", "Microservices", "PostgreSQL", "Docker", "React.js"]
+    time: "Aug 2026 – Present",
+    role: "Fullstack Engineer",
+    company: "Vouch Technology PTE LTD",
+    companyShort: "Vouch Technology",
+    desc: "Shipping full-stack production features within days, including bringing a new platform from development to go-live in roughly two weeks. Engineered production AI systems with tool calling and graceful error recovery, and built core product workflows spanning payments, background processing, and third-party integrations.",
+    skills: ["Next.js", "Node.js", "Generative AI", "Stripe", "GCP Cloud Tasks"]
   },
   {
-    time: "Jan 2025 – Present",
-    role: "Co-Founder & CTO",
-    company: "Intervyou (Google for Startups)",
+    time: "Jun 2025 – Present",
+    role: "Founder & Chief Technology Officer (Part-time)",
+    company: "Intervyou (Google for Startups & NVIDIA Inception)",
     companyShort: "Intervyou",
-    desc: "Bootstrapped an AI-powered SaaS to 3,000+ active users. Architected the core AI assessment engine using Next.js and custom Retrieval-Augmented Generation (RAG) pipelines for customized interview diagnostics.",
-    skills: ["Next.js", "Generative AI", "RAG", "Product Engineering", "TypeScript"]
+    desc: "Bootstrapped an AI-powered SaaS to 3,000+ registered users and profitability on GCP Cloud Run. Architected a multi-agent AI assessment engine for content, audio, and non-verbal evaluation, and designed a token-based monetization system for B2B pilots across SMK Telkom schools.",
+    skills: ["Next.js", "Node.js", "Multi-Agent AI", "GCP Cloud Run", "PostgreSQL", "Sentry"]
+  },
+  {
+    time: "Aug 2025 – Aug 2026",
+    role: "Fullstack Programmer",
+    company: "MGG Software PTE LTD (Singapore Government Platform)",
+    companyShort: "MGG Software",
+    desc: "Contributed to a large-scale Singapore government enterprise platform on Spring Boot and React.js. Resolved a critical silent data-loss bug across 8 workflow services, cut endpoint latency ~50% on high-traffic modules, and delivered a third-party government integration with zero post-launch incidents.",
+    skills: ["Java Spring Boot", "React.js", "MSSQL", "Oracle", "Azure AD", "Hibernate"]
   },
   {
     time: "Feb 2025 – Aug 2025",
@@ -112,20 +120,28 @@ const experienceData = [
     skills: ["Next.js", "Laravel", "MySQL", "PostgreSQL", "MongoDB", "Docker"]
   },
   {
-    time: "Aug 2023 – Feb 2025",
-    role: "Fullstack Web Developer",
-    company: "PT Hafdzamedia Teknologi Aplikasi",
-    companyShort: "Hafdzamedia",
-    desc: "Developed and maintained web applications using React, Next.js, and Laravel. Focused on creating responsive and user-friendly interfaces while ensuring high performance backend database functionality.",
-    skills: ["React", "Next.js", "Laravel", "MySQL", "JavaScript", "TypeScript"]
-  },
-  {
     time: "Jul 2024 – Jan 2025",
     role: "AI Trainer",
     company: "Outlier AI (Remote Freelance)",
     companyShort: "Outlier AI",
     desc: "Trained Large Language Models (LLM) using RLHF (Reinforcement Learning from Human Feedback), focusing on enhancing human language alignment, response verification, and fine-tuning prompt behaviors.",
     skills: ["Generative AI", "RLHF", "LLM", "Prompt Engineering"]
+  },
+  {
+    time: "Sep 2023 – Jul 2025",
+    role: "Web Developer & AI Consultant",
+    company: "Freelance (Malang)",
+    companyShort: "Freelance",
+    desc: "Architected a multi-modal AI mental health support system integrating Gemini API with a RAG pipeline and domain-specific fine-tuning. Implemented RBAC across multi-tenant apps and maintained 70–80% client retention across 15+ delivered projects spanning LMS, E-Commerce, and ERP systems.",
+    skills: ["Gemini API", "RAG", "Laravel", "MySQL", "RBAC"]
+  },
+  {
+    time: "Aug 2023 – Feb 2025",
+    role: "IoT and Fullstack Developer",
+    company: "PT Hafdzamedia Teknologi Aplikasi",
+    companyShort: "Hafdzamedia",
+    desc: "Diagnosed N+1 query bottlenecks, cutting response times from 3–8s to under 300ms. Engineered real-time LMS features with Firebase Realtime Database and Laravel Broadcasting, implemented Redis caching for payments, and established zero-downtime CI/CD pipelines via GitHub Actions.",
+    skills: ["Laravel", "Firebase", "Redis", "MySQL", "GitHub Actions"]
   }
 ];
 
@@ -273,7 +289,7 @@ export default function LandingScene() {
       case "threejs": return <SiThreedotjs {...props} />;
       case "nodejs": return <SiNodedotjs {...props} />;
       case "postgresql": return <SiPostgresql {...props} />;
-      case "python": return <SiPython {...props} />;
+      case "springboot": return <SiSpringboot {...props} />;
       case "figma": return <SiFigma {...props} />;
       case "github": return <SiGithub {...props} />;
       case "gsap": return <SiGreensock {...props} />;
@@ -386,7 +402,7 @@ export default function LandingScene() {
             <h1 className="hero-surname">Shafel</h1>
             <div className="hero-subtitle">
               <span className="subtitle-tag">// Full Stack Software Engineer</span>
-              <span className="subtitle-tag">Web Dev & AI Sentinels</span>
+              <span className="subtitle-tag">Enterprise Systems & AI Products</span>
             </div>
           </div>
 
@@ -474,9 +490,9 @@ export default function LandingScene() {
 
                 <div className="editorial-panel">
                   <span className="editorial-panel-eyebrow">02 / LEADERSHIP</span>
-                  <h3>AI SaaS & Technical Vision</h3>
+                  <h3>Enterprise & AI SaaS Builder</h3>
                   <p>
-                    Currently, I engineer large-scale enterprise systems at <strong>MGG Software</strong>, ensuring strict data compliance and high availability for international clients. Simultaneously, I lead the technical vision as the <strong>CTO of Intervyou</strong>, an AI-driven platform supported by the <strong>Google for Startups Cloud Program and NVIDIA Inception</strong>.
+                    Recognized as <strong>Best Computer Science Graduate</strong>, I bring a systems-engineering mindset to everything I build — from architecting enterprise-grade backends to founding and monetizing an AI SaaS product. My work spans full-stack product engineering and hands-on AI engineering across multi-agent pipelines and RAG architectures.
                   </p>
                 </div>
 
